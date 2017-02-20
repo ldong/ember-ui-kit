@@ -41,25 +41,26 @@ test('it allows nesting', function(assert) {
 
   let app = this.$().closest('.ember-application');
 
-  assert.equal(app.children('.ui-modal:nth(0)').text().trim(), 'MODAL 1 !!', 'should flatten modal in order: 1');
-  assert.equal(app.children('.ui-modal:nth(1)').text().trim(), 'MODAL 4 !!', 'should flatten modal in order: 4');
-  assert.equal(app.children('.ui-modal:nth(2)').text().trim(), 'MODAL 5 !!', 'should flatten modal in order: 5');
-  assert.equal(app.children('.ui-modal:nth(3)').text().trim(), 'MODAL 6 !!', 'should flatten modal in order: 6');
+  assert.equal(app.children('.ui-modal:nth(0)').text().trim(), 'MODAL 1 !!', 'initial should flatten modal in order: 1');
+  assert.equal(app.children('.ui-modal:nth(1)').text().trim(), 'MODAL 4 !!', 'initial should flatten modal in order: 4');
+  assert.equal(app.children('.ui-modal:nth(2)').text().trim(), 'MODAL 5 !!', 'initial should flatten modal in order: 5');
+  assert.equal(app.children('.ui-modal:nth(3)').text().trim(), 'MODAL 6 !!', 'initial should flatten modal in order: 6');
 
   this.set('show2', true);
 
   app.children('.ui-modal').each(function(index, element) {
-    assert.equal(Ember.$(element).text().trim(), `MODAL ${index + 1} !!`, `should flatten modal in order: ${index}`);
+    assert.equal(Ember.$(element).text().trim(), `MODAL ${index + 1} !!`, `show should flatten modal in order: ${index}`);
   });
 
-  //this.set('show2', false);
+  this.set('show2', false);
 
-  //assert.equal(app.children('.ui-modal:nth(0)').text().trim(), 'MODAL 1 !!', 'should flatten modal in order: 1');
-  //assert.equal(app.children('.ui-modal:nth(1)').text().trim(), 'MODAL 4 !!', 'should flatten modal in order: 4');
-  //assert.equal(app.children('.ui-modal:nth(2)').text().trim(), 'MODAL 5 !!', 'should flatten modal in order: 5');
-  //assert.equal(app.children('.ui-modal:nth(3)').text().trim(), 'MODAL 6 !!', 'should flatten modal in order: 6');
+  assert.equal(app.children('.ui-modal:nth(0)').text().trim(), 'MODAL 1 !!', 'off should flatten modal in order: 1');
+  assert.equal(app.children('.ui-modal:nth(1)').text().trim(), 'MODAL 4 !!', 'off should flatten modal in order: 4');
+  assert.equal(app.children('.ui-modal:nth(2)').text().trim(), 'MODAL 5 !!', 'off should flatten modal in order: 5');
+  assert.equal(app.children('.ui-modal:nth(3)').text().trim(), 'MODAL 6 !!', 'off should flatten modal in order: 6');
 
-  //this.clearRender();
+  this.clearRender();
 
-  //assert.equal(app.children('.ui-modal').length, 0, 'clear render should remove all modal');
+  assert.equal(app.children('.ui-modal').length, 0, 'clear render should remove all modal');
+
 });
