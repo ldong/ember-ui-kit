@@ -27,50 +27,66 @@ export default Ember.Component.extend(Composable, {
   classNames: 'ui-modal',
   layout,
 
-  connected: false,
-
   childModals: construct(Ember.A).readOnly(),
 
-  //insertionPoint: Ember.computed(function() {
-  //  let node = Ember.$(document.createComment(`modal:${this.get('elementId')}`));
-  //  let parent = this.$().parentsUntil('.ember-application', '.ui-modal');
+  placeholder: Ember.computed(function() {
+    return Ember.$(document.createComment(`modal:${this.elementId}`));
+  }).readOnly(),
 
-  //  if (parent.length) {
-  //    return node.insertAfter(parent.data('$E').get('insertionPoint'));
-  //  }
-
-  //  let app = this.$().closest('.ember-application');
-
-  //  // if we have parent modal,
-  //  // it should be right next to it
-
-  //  node.appendTo(app);
-
-  //  return node;
-  //}).readOnly(),
-
+  // will insert is called on ALL components before did insert
+  // will insert is called from top down
   willInsertElement() {
     this._super(...arguments);
 
+    let children = this.get('childModals');
+
     this.$().on('register.modal', (evt, modal) => {
-      let app = this.$().closest('.ember-application').get(0);
+      evt.stopPropagation();
 
-      this.get('childModals').pushObject(modal);
-
-      Ember.run.scheduleOnce('afterRender', app, layoutModals);
+      children.pushObject(modal);
     });
+
+    Ember.run.schedule('render', this, function() {
+      let parent = this.$().parent().closest('.ui-modal')
+
+      if (parent.length) {
+        this.$().insertAfter(parent);
+      }
+      else {
+        this.$().appendTo(this.$().closest('.ember-application'));
+
+        children.forEach(modal => {
+          modal.$().insertAfter(this.$());
+        });
+      }
+    });
+
+    //
+    // Do everything in one repaint cycle
+    //
+
+    this.$().hide();
+
+    Ember.run.schedule('afterRender', this, function() {
+      this.$().show();
+    });
+
   },
 
+  // did insert is called from bottom up
   didInsertElement() {
     this._super(...arguments);
 
     this.$().parent().trigger('register.modal', this);
     this.$().parent().trigger('register.all', this);
-
-    //Ember.run.schedule('afterRender', this, function() {
-    //  swapNodes(this.$(), this.get('insertionPoint'));
-
-    //  this.set('connected', true);
-    //});
   },
+
+  willDestroyElement() {
+    this._super(...arguments);
+
+    // TODO I have to move it back :(
+    //debugger;
+
+    //this.$().remove();
+  }
 });

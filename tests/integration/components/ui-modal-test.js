@@ -17,31 +17,49 @@ test('it allows nesting', function(assert) {
             {{#if show2}}
               {{#ui-modal}}
                 MODAL 2 !!
+                {{#ui-modal}}
+                  MODAL 3 !!
+                {{/ui-modal}}
               {{/ui-modal}}
             {{/if}}
           </div>
           {{#ui-modal}}
-            MODAL 3 !!
+            MODAL 4 !!
           {{/ui-modal}}
         {{/ui-modal}}
       </div>
       <div>
         {{#ui-modal}}
-          MODAL 4 !!
+          MODAL 5 !!
           {{#ui-modal}}
-            MODAL 5 !!
+            MODAL 6 !!
           {{/ui-modal}}
         {{/ui-modal}}
       </div>
     </div>
   `);
 
+  let app = this.$().closest('.ember-application');
+
+  assert.equal(app.children('.ui-modal:nth(0)').text().trim(), 'MODAL 1 !!', 'should flatten modal in order: 1');
+  assert.equal(app.children('.ui-modal:nth(1)').text().trim(), 'MODAL 4 !!', 'should flatten modal in order: 4');
+  assert.equal(app.children('.ui-modal:nth(2)').text().trim(), 'MODAL 5 !!', 'should flatten modal in order: 5');
+  assert.equal(app.children('.ui-modal:nth(3)').text().trim(), 'MODAL 6 !!', 'should flatten modal in order: 6');
+
   this.set('show2', true);
 
-  debugger;
-  // TODO test that the modal stack order is maintained during teardown
-
-  this.$().closest('.ember-application').children('.ui-modal__insert').each(function(index, element) {
+  app.children('.ui-modal').each(function(index, element) {
     assert.equal(Ember.$(element).text().trim(), `MODAL ${index + 1} !!`, `should flatten modal in order: ${index}`);
   });
+
+  //this.set('show2', false);
+
+  //assert.equal(app.children('.ui-modal:nth(0)').text().trim(), 'MODAL 1 !!', 'should flatten modal in order: 1');
+  //assert.equal(app.children('.ui-modal:nth(1)').text().trim(), 'MODAL 4 !!', 'should flatten modal in order: 4');
+  //assert.equal(app.children('.ui-modal:nth(2)').text().trim(), 'MODAL 5 !!', 'should flatten modal in order: 5');
+  //assert.equal(app.children('.ui-modal:nth(3)').text().trim(), 'MODAL 6 !!', 'should flatten modal in order: 6');
+
+  //this.clearRender();
+
+  //assert.equal(app.children('.ui-modal').length, 0, 'clear render should remove all modal');
 });
