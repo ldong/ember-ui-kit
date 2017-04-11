@@ -9,6 +9,7 @@ import layout from '../templates/components/in-select';
  * @namespace UI
  */
 export default Ember.Component.extend({
+  tagName: 'span',
   classNames: 'in-select',
   layout,
 

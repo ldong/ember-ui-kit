@@ -9,7 +9,7 @@ import MS from '../utils/microstate';
  * @namespace UI
  */
 export default Ember.Component.extend({
-  tagName: 'input',
+  tagName: 'span',
   classNames: 'in-text',
 
   // attrs {

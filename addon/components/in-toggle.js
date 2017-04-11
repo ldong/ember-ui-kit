@@ -15,6 +15,7 @@ import MS from '../utils/microstate';
  * @namespace UI
  */
 export default Ember.Component.extend({
+  tagName: 'span',
   classNames: 'in-toggle',
   classNameBindings: 'valueNormalized:in-toggle--on:in-toggle--off',
   attributeBindings: 'tabindex',
