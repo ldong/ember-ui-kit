@@ -58,6 +58,7 @@
     "ember-let": "0.5.4",
     "ember-load-initializers": "^1.0.0",
     "ember-microstates": "0.3.0",
+    "ember-native-dom-helpers": "^0.3.9",
     "ember-promise-helpers": "1.0.2",
     "ember-resolver": "^4.0.0",
     "ember-source": "~2.12.0",

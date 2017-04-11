@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import layout from '../templates/components/in-text';
 
 import MS from '../utils/microstate';
 
@@ -11,16 +12,26 @@ import MS from '../utils/microstate';
 export default Ember.Component.extend({
   tagName: 'span',
   classNames: 'in-text',
+  layout,
 
-  // attrs {
+  /**
+   * @attribute value
+   */
   value: null,
-  tabindex: 0,
-  // attrs }
+
+  /**
+   * @attribute placeholder
+   */
+  placeholder: null,
+
+  valueNormalized: Ember.computed('value', function() {
+    return String(this.get('value') || '');
+  }).readOnly(),
 
   willInsertElement() {
     this._super(...arguments);
 
-    this.$().on('input change', Ember.run.bind(this, function(evt) {
+    this.$().on('input', Ember.run.bind(this, function(evt) {
       MS.set(this, 'value', evt.target.value);
     }));
   },
